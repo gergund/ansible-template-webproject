@@ -1,0 +1,2 @@
+#[OS] update rpm packages
+update_packages: False

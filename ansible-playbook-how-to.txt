@@ -1,0 +1,68 @@
+[How to ansible SSH connection]
+
+- [Add hosts]
+
+	cat /etc/hosts
+
+	>>	178.62.199.45	web1.itwnik.com
+	>>	188.226.187.221 web2.itwnik.com
+
+- [Add servers to group]
+
+	cat /etc/ansible/hosts
+
+	>>	[webservers]
+	>>	web1.itwnik.com
+	>>	web2.itwnik.com
+
+- [List hosts in Ansible config]
+
+>>
+	denys@denys-OptiPlex-990:~$ ansible --list-hosts all
+		  hosts (2):
+    			web1.itwnik.com
+			web2.itwnik.com
+	denys@denys-OptiPlex-990:~$ ansible --list-hosts webservers
+		  hosts (2):
+		    	web1.itwnik.com
+			web2.itwnik.com
+
+- [Check SSH connection]
+
+	>>
+	denys@denys-OptiPlex-990:~$ ansible all -u dgergun -m ping
+		web1.itwnik.com | SUCCESS => {
+           	    "changed": false, 
+		    "ping": "pong"
+		}
+		web2.itwnik.com | SUCCESS => {
+		    "changed": false, 
+		    "ping": "pong"
+		}
+	>>
+	denys@denys-OptiPlex-990:~$ ansible webservers -u dgergun -m ping
+		web1.itwnik.com | SUCCESS => {
+		    "changed": false, 
+		    "ping": "pong"
+		}
+		web2.itwnik.com | SUCCESS => {
+		    "changed": false, 
+		    "ping": "pong"
+		}
+
+- [Use SUDO in SSH connection]
+	>>
+	denys@denys-OptiPlex-990:~$ ansible webservers -u dgergun -m ping  --sudo
+		web1.itwnik.com | SUCCESS => {
+		    "changed": false, 
+		    "ping": "pong"
+		}
+		web2.itwnik.com | SUCCESS => {
+		    "changed": false, 
+		    "ping": "pong"
+		}
+
+- [Run Ansible playbook (edit site.yml with roles) ]
+
+	>>	
+	ansible-playbook -u dgergun --sudo  site.yml

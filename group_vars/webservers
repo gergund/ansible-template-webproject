@@ -1,0 +1,30 @@
+#[Nginx settings]
+nginx_user: nginx nginx
+nginx_worker_rlimit_nofile: 8192
+nginx_worker_processes: auto
+nginx_worker_connections: 1024
+nginx_error_log: /var/log/nginx/error.log
+nginx_access_log: /var/log/nginx/access.log  main
+nginx_autoindex: 'off'
+nginx_keepalive_timeout: 30
+nginx_gzip: 'on'
+
+#[PHP stack settings]
+php_max_execution_time: 600
+php_memory_limit: 768M
+php_error_reporting: On
+php_display_errors: Off
+php_log_errors: On
+php_post_max_size: 16M
+php_upload_max_filesize: 16M
+
+#[PHP-FPM settings]
+php_pm: static
+php_max_children: 8
+php_fpm_socket: 9000
+
+#[Webserver Virtual host settings]
+vhost_user: nginx
+vhost_listen_port: 80
+vhost_server_name: dev.loc
+vhost_document_root: /vagrant/www/

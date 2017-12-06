@@ -1,0 +1,69 @@
+# {{ ansible_managed }}
+user              {{nginx_user}};
+daemon            on;
+worker_processes  {{nginx_worker_processes}};
+
+error_log  {{nginx_error_log}};
+pid        /var/run/nginx.pid;
+
+worker_rlimit_nofile {{nginx_worker_rlimit_nofile}};
+
+events {
+    worker_connections  {{nginx_worker_connections}};
+    multi_accept on;
+}
+
+
+http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  {{nginx_access_log}};
+
+    sendfile        on;
+    tcp_nopush     on;
+    tcp_nodelay  on;
+    autoindex {{nginx_autoindex}};
+
+    client_header_timeout  3m;
+    client_body_timeout 3m;
+    send_timeout        3m;
+    client_max_body_size 16M;
+    client_body_buffer_size  1K;
+    client_header_buffer_size 1k;
+    large_client_header_buffers 4 8k;
+    reset_timedout_connection on;
+
+    keepalive_timeout  {{nginx_keepalive_timeout}};
+    types_hash_max_size 2048;
+
+    gzip  {{nginx_gzip}};
+    gzip_static         on;
+    gzip_http_version   1.1;
+    gzip_disable "MSIE [1-6]\.(?!.*SV1)";
+    gzip_vary on;
+    gzip_proxied any;
+    gzip_comp_level 6;
+    gzip_buffers 16 8k;
+    gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml text/javascript application/javascript text/x-js image/jpeg image/png image/gif text/x-component application/rss+xml font/truetype application/x-font-ttf font/opentype application/vnd.ms-fontobject image/svg+xml;
+
+    # Replace client ip by the one forwarded by the reverse proxy
+    set_real_ip_from 127.0.0.1;
+    real_ip_header X-Forwarded-For;
+
+    # Simulate https depending on x-forwarded headers
+    map $http_x_forwarded_proto $fastcgi_https {
+    	default $https;
+    	http '';
+ 	https on;
+    }
+
+    # Load config files from the /etc/nginx/conf.d directory
+    # The default server is in conf.d/default.conf
+    include /etc/nginx/conf.d/*.conf;
+
+}
