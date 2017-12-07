@@ -21,6 +21,13 @@
 
 - name: Configure Nginx Vhost
   template: src=vhost.conf.j2 dest=/etc/nginx/conf.d/vhost.conf
+  notify: restart nginx
+
+- name:  Copy default SSL cert
+  copy: src=dev.loc.crt dest=/etc/nginx/ssl/
+
+- name:  Copy default SSL cert key
+  copy: src=dev.loc.key dest=/etc/nginx/ssl/
 
 - name: Nginx autostart
   service: name=nginx state=started enabled=yes

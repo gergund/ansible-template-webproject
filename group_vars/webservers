@@ -19,12 +19,14 @@ php_post_max_size: 16M
 php_upload_max_filesize: 16M
 
 #[PHP-FPM settings]
+php_user: apache
+php_group: apache
 php_pm: static
 php_max_children: 8
 php_fpm_socket: 9000
 
 #[Webserver Virtual host settings]
-vhost_user: nginx
-vhost_listen_port: 80
+vhost_listen_port: 8080
+vhost_listen_ssl_port: 443
 vhost_server_name: dev.loc
 vhost_document_root: /var/www/html/
