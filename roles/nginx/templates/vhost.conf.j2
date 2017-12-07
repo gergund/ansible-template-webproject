@@ -29,6 +29,7 @@ server {
     location ^~ /pkginfo/            { deny all; }
     location ^~ /report/config.xml   { deny all; }
     location ^~ /var/                { deny all; }
+    location ^~ /dev/                { deny all; }
 
     location @handler {
         rewrite / /index.php;

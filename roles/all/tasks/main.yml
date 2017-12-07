@@ -5,6 +5,9 @@
 
 - name: Create the GPG key for EPEL
   copy: src=RPM-GPG-KEY-EPEL-6 dest=/etc/pki/rpm-gpg
+
+- name: Install EPEL rpm package
+  yum: name='http://epel.besthosting.ua/6/x86_64/epel-release-6-8.noarch.rpm' state=present
   
 - name: Run yum upgrade for all packages
   yum: name=* state=latest update_cache=yes
@@ -13,11 +16,6 @@
 
 - name: Disable SElinux
   copy: src=selinux dest=/etc/selinux/config 
-
-- name: Setenforce 0
-  command: setenforce 0
-  become: true
-  become_user: root
 
 - name: Install default set of software
   yum: name={{ item }} state=present

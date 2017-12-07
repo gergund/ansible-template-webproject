@@ -27,4 +27,4 @@ php_fpm_socket: 9000
 vhost_user: nginx
 vhost_listen_port: 80
 vhost_server_name: dev.loc
-vhost_document_root: /vagrant/www/
+vhost_document_root: /var/www/html/

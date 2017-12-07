@@ -1,9 +1,13 @@
 ---
+- name: preparing all servers with common role
+  hosts: all
+  roles:
+        - all
 - name: preparing webservers
   hosts: webservers
   roles:
         - nginx
-#        - php-fpm
+        - php-fpm
 
 #single server example
 #- name: preparing web1.itwnik.com
