@@ -1,5 +1,6 @@
 #[Nginx settings]
-nginx_user: nginx nginx
+nginx_user: nginx
+nginx_group: nginx
 nginx_worker_rlimit_nofile: 8192
 nginx_worker_processes: auto
 nginx_worker_connections: 1024
