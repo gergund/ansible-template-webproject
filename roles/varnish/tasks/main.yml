@@ -1,0 +1,20 @@
+- name: Copy the Varnish repository definition
+  copy: src=varnish3.repo dest=/etc/yum.repos.d/
+
+- name: Import Varnish repo GPG keys
+  rpm_key: state=present key=https://packagecloud.io/varnishcache/varnish30/gpgkey
+
+- name: Install latest Varnish from official repo
+  yum: name={{ item }} enablerepo='varnishcache_varnish30' state=present
+  with_items:
+        - varnish
+
+- name: Copy the default.vcl file
+  copy: src=default.vcl dest=/etc/varnish/default.vcl
+
+- name: Configure and Restart Nginx
+  template: src=varnish-sysconfig.j2 dest=/etc/sysconfig/varnish
+  notify: restart varnish
+
+- name: Varnish autostart
+  service: name=varnish state=started enabled=yes
