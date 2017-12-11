@@ -25,19 +25,30 @@
 - name: Create Nginx site-enabled directory
   file: path=/etc/nginx/site-enabled owner=root group=root mode=755 state=directory
 
+- name: Create Nginx h5bp directory
+  file: path=/etc/nginx/h5bp owner=root group=root mode=755 state=directory
+
 - name: Create Nginx Vhost file in site-available
   template: src=vhost.conf.j2 dest=/etc/nginx/site-available/vhost.conf
-  notify: restart nginx
+  notify: reloaded nginx
 
 - name: Link Nginx Vhost file in site-enabled
   file: src=/etc/nginx/site-available/vhost.conf dest=/etc/nginx/site-enabled/vhost.conf state=link
-  notify: restart nginx
+  notify: reloaded nginx
 
 - name:  Copy default SSL cert
   copy: src=dev.loc.crt dest=/etc/nginx/ssl/
 
 - name:  Copy default SSL cert key
   copy: src=dev.loc.key dest=/etc/nginx/ssl/
+
+- name: Copy archive for h5bp configs
+  copy: src=h5bp.tar.gz dest=/etc/nginx/h5bp/
+  notify: reloaded nginx
+
+- name: Extract configs for h5bp configs
+  shell: cd /etc/nginx/h5bp/ && tar -zxvf h5bp.tar.gz
+  notify: reloaded nginx
 
 - name: Nginx autostart
   service: name=nginx state=started enabled=yes

@@ -1,5 +1,5 @@
 # {{ ansible_managed }}
-user              {{nginx_user}} {{nginx_group}};
+user              {{nginx_user}};
 daemon            on;
 worker_processes  {{nginx_worker_processes}};
 
@@ -28,6 +28,10 @@ http {
     tcp_nopush     on;
     tcp_nodelay  on;
     autoindex {{nginx_autoindex}};
+
+    open_file_cache max=200000 inactive=20s;
+    open_file_cache_valid    2m;
+    open_file_cache_min_uses 2;
 
     client_header_timeout  3m;
     client_body_timeout 3m;
